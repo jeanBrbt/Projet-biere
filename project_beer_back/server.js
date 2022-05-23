@@ -1,25 +1,12 @@
 const express = require('express');
 const db = require('./config/db')
 const cors = require('cors')
-//const app = require('express')();
 
 const app = express();
 const  PORT = 3002;
 app.use(cors());
 app.use(express.json());
-//test
-// SELECT user_beers.beer_id, user_beers.rating ,user_id FROM user LEFT JOIN user_beers ON user.id = user_beers.user_id WHERE user.id=1;
-//SELECT user_beers.beer_id, user_beers.rating  FROM user LEFT JOIN user_beers ON user.id = user_beers.user_id WHERE user.id=1;
 
-//update
-// UPDATE `user_beers` SET `rating`='10' WHERE `user_id`='1' AND`beer_id`='1'
-
-//nouvelle note 
-//INSERT INTO `user_beers`(`rating`, `user_id`, `beer_id`) VALUES ('[value-1]','[value-2]','[value-3]')
-
-//nouvelle biere
-//INSERT INTO `beer`(`beer_id`) VALUES ('[value-1]')
-//
 
 // Route to get all rates of a user 
 db.connect(err=>{
@@ -28,29 +15,6 @@ db.connect(err=>{
         throw err;
     }
     console.log("database connected")
-
-
-    app.get("/api/get", (req,res)=>{
-        db.query("SELECT * FROM posts", (err,result)=>{
-            if(err) {
-                console.log(err)
-            }
-            res.send(result)
-        });
-    });
-
-// Route to get one rates of a user
-    app.get("/api/getFromId/:id", (req,res)=>{
-
-        const id = req.params.id;
-        db.query("SELECT * FROM posts WHERE id = ?", id,
-            (err,result)=>{
-                if(err) {
-                    console.log(err)
-                }
-                res.send(result)
-            });
-    });
 
 // Route for creating the post
     app.post('/login', (req,res)=> {
@@ -112,7 +76,7 @@ db.connect(err=>{
             }
         });
     })
-// Route to like a post
+
     app.post('/newrate',(req,res)=>{
         let beer_id = req.body.beer_id;
         let user_id = req.body.user_id;
@@ -126,6 +90,7 @@ db.connect(err=>{
             res.send({success:1});
         });
     });
+
 
     app.post('/setrate',(req,res)=> {
         let beer_id = req.body.beer_id;
@@ -180,13 +145,7 @@ db.connect(err=>{
             }
         });
     });
-        /*console.log(result);
-            if(result.changedRows) {
-                res.send({success: 1});
-            }
-            else{
-                res.send({success:0});
-            }*/
+
 
     app.post('/getrate',(req,res)=>{
         let beer_id = req.body.beer_id;
@@ -207,6 +166,8 @@ db.connect(err=>{
             }
         });
     });
+
+
     app.post('/getbeerswithrate',(req,res)=>{
         let rate = req.body.rate;
         let user_id = req.body.user_id;
@@ -225,27 +186,6 @@ db.connect(err=>{
                 });
         });
     });
-
-
-// Route to like a post
-    app.post('api/like/:id',(req,res)=>{
-        let id = req.params.id;
-        db.query("UPDATE `user_beers` SET `rating`='10' WHERE `user_id`=? AND`beer_id`=?",id, (err,result)=>{
-            if(err) {
-                console.log(err)   }
-            console.log(result)
-        });
-    });
-
-// Route to delete a post
-
-    app.delete('/api/delete/:id',(req,res)=>{
-        const id = req.params.id;
-
-        db.query("DELETE FROM posts WHERE id= ?", id, (err,result)=>{
-            if(err) {
-                console.log(err)
-            } }) })
 
 
 })
